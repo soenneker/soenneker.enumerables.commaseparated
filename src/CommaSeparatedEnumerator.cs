@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace Soenneker.Enumerables.CommaSeparated;
 
 /// <summary>
-/// Stack-only enumerator that yields trimmed CSV tokens without allocations.
+/// Stack-only enumerator that yields trimmed comma-separated tokens without allocations.
 /// </summary>
 public ref struct CommaSeparatedEnumerator
 {
@@ -14,16 +14,24 @@ public ref struct CommaSeparatedEnumerator
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CommaSeparatedEnumerator(ReadOnlySpan<char> value)
     {
+        // Trim once up-front to match enumerable semantics
         _remaining = value.Trim();
         _current = default;
     }
 
+    /// <summary>
+    /// The current token (trimmed, non-empty).
+    /// </summary>
     public ReadOnlySpan<char> Current
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _current;
     }
 
+    /// <summary>
+    /// Advances to the next token.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool MoveNext()
     {
         while (true)
@@ -32,6 +40,7 @@ public ref struct CommaSeparatedEnumerator
                 return false;
 
             int idx = _remaining.IndexOf(',');
+
             if (idx < 0)
             {
                 _current = _remaining.Trim();
@@ -44,7 +53,7 @@ public ref struct CommaSeparatedEnumerator
             _remaining = _remaining[(idx + 1)..];
 
             if (_current.IsEmpty)
-                continue; // skip empty tokens like ",," or ", ,"
+                continue; // Skip empty tokens (",," or ", ,")
 
             return true;
         }
