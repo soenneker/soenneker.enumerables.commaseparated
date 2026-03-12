@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.Enumerables.CommaSeparated.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Enumerables.CommaSeparated\Soenneker.Enumerables.CommaSeparated.csproj" />
     </ItemGroup>
 
     <ItemGroup>
