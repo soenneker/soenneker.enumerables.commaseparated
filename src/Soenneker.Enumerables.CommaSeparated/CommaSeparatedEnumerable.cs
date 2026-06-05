@@ -18,6 +18,10 @@ public readonly ref struct CommaSeparatedEnumerable
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CommaSeparatedEnumerable(string? value) => _value = value.AsSpan();
 
+    /// <summary>
+    /// Gets enumerator.
+    /// </summary>
+    /// <returns>The result of the operation.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CommaSeparatedEnumerator GetEnumerator() => new(_value);
 
