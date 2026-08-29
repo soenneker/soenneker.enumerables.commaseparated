@@ -31,6 +31,7 @@ public ref struct CommaSeparatedEnumerator
     /// <summary>
     /// Advances to the next token.
     /// </summary>
+    /// <returns>true if advances to the next token; otherwise, false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool MoveNext()
     {

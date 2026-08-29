@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace Soenneker.Enumerables.CommaSeparated;
 
 /// <summary>
-/// Allocation-free enumeration of comma-separated values using <see cref="ReadOnlySpan{char}"/>.
+/// Allocation-free enumeration of comma-separated values using <c>ReadOnlySpan&lt;char&gt;</c>.
 /// Tokens are trimmed and empty entries are skipped.
 /// Intended for lightweight CSV-style inputs (no quoting/escaping).
 /// </summary>
@@ -21,13 +21,14 @@ public readonly ref struct CommaSeparatedEnumerable
     /// <summary>
     /// Gets enumerator.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The requested comma Separated Enumerator.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CommaSeparatedEnumerator GetEnumerator() => new(_value);
 
     /// <summary>
     /// Counts non-empty, trimmed comma-separated tokens without allocations.
     /// </summary>
+    /// <returns>The resulting value.</returns>
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public int Count()
     {
