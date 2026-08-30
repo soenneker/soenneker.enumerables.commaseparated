@@ -5,7 +5,7 @@
 
 # Soenneker.Enumerables.CommaSeparated
 
-Allocation-free enumeration of comma-separated values using `ReadOnlySpan<char>`. Tokens are trimmed and empty entries are skipped. Intended for lightweight CSV-style inputs (no quoting/escaping).
+Enumerates simple comma-delimited text as trimmed `ReadOnlySpan<char>` tokens without allocating a string or array for each value.
 
 ## Install
 
@@ -13,15 +13,40 @@ Allocation-free enumeration of comma-separated values using `ReadOnlySpan<char>`
 dotnet add package Soenneker.Enumerables.CommaSeparated
 ```
 
-## What you get
+## Enumerate values
 
-- `CommaSeparatedEnumerable` — Allocation-free enumeration of comma-separated values using `ReadOnlySpan<char>`. Tokens are trimmed and empty entries are skipped. Intended for lightweight CSV-style inputs (no quoting/escaping).
-- `CommaSeparatedEnumerator` — Stack-only enumerator that yields trimmed comma-separated tokens without allocations.
+```csharp
+using Soenneker.Enumerables.CommaSeparated;
 
-## API at a glance
+ReadOnlySpan<char> input = "alpha, beta, ,gamma";
 
-| API | What it does | Result / important behavior |
-| --- | --- | --- |
-| `CommaSeparatedEnumerable.Count()` | Counts non-empty, trimmed comma-separated tokens without allocations. | The resulting value. |
-| `CommaSeparatedEnumerator.Current` | The current token (trimmed, non-empty). | The current token (trimmed, non-empty). |
-| `CommaSeparatedEnumerator.MoveNext()` | Advances to the next token. | true if advances to the next token; otherwise, false. |
+foreach (ReadOnlySpan<char> token in new CommaSeparatedEnumerable(input))
+{
+    // token is "alpha", then "beta", then "gamma"
+    Process(token);
+}
+```
+
+Leading and trailing whitespace is trimmed from each token. Empty entries—including whitespace-only entries—are skipped. A null string constructor argument behaves like an empty input.
+
+## Parse without intermediate strings
+
+Many framework parsing APIs accept spans directly:
+
+```csharp
+var values = new CommaSeparatedEnumerable("10, 20, 30");
+var total = 0;
+
+foreach (ReadOnlySpan<char> value in values)
+    total += int.Parse(value);
+
+int count = values.Count(); // 3
+```
+
+`Count()` scans the input independently; it does not cache tokens. Calling it and then enumerating performs two passes.
+
+## Boundaries
+
+This is not a CSV parser. Commas always delimit values, and quoting, escaped commas, embedded records, and alternate separators are not supported. Use a CSV library when inputs can contain those features.
+
+Both the enumerable and enumerator are `ref struct` types. They cannot be boxed, stored on the heap, used across `await` or `yield`, or exposed as `IEnumerable<T>`. Each `Current` span points into the original input; call `ToString()` if a token must outlive that input or the current synchronous scope.
