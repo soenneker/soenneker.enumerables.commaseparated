@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net11.0</TargetFramework>
         <IsAotCompatible>true</IsAotCompatible>
         <Nullable>enable</Nullable>
         <Platforms>AnyCPU</Platforms>
@@ -9,7 +9,7 @@
 
     <PropertyGroup>
         <Description>High-performance, allocation-free CSV enumeration using ReadOnlySpan{char} — a drop-in alternative to string.Split(',') for hot paths.</Description>
-        <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
+        <Version Condition="'$(BUILD_VERSION)' == ''">11.0.0</Version>
         <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
         <AssemblyName>Soenneker.Enumerables.CommaSeparated</AssemblyName>
         <PackageId>Soenneker.Enumerables.CommaSeparated</PackageId>
